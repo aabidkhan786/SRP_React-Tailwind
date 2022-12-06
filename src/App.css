@@ -40,3 +40,18 @@
 body{
   background-color: #f8f8f8;
 }
+
+.date_input{
+  width: 75%;
+  margin-top:10px;
+  border-radius: 5px;
+  display: block;
+  padding: 5px 10px;
+  border: 1px solid #e3e3e3;
+}
+
+.date_input:focus{
+  outline: none;
+  border: 0;
+  border: 1px solid #adadad;
+}
