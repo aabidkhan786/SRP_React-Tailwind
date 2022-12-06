@@ -1,9 +1,13 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, {useState} from "react";
+import { useForm, Controller } from "react-hook-form";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Styled from "styled-components";
 import signupImage from "../Images/signup-image.jpg";
 
 function StudentSignup() {
+  const [birthDate, setBirthDate] = useState(new Date());
+
   const onSubmit = (data) => {
     console.log(data);
   };
@@ -11,6 +15,7 @@ function StudentSignup() {
   const {
     handleSubmit,
     register,
+    control,
     formState: { errors },
   } = useForm();
 
@@ -62,40 +67,6 @@ function StudentSignup() {
             </div>
           </div>
           <div className="form-group mt-3">
-            <label>Age : </label>
-            <div className="block">
-              <Styld.FormInput
-                type="number"
-                step={1}
-                className="form-control"
-                id="Age"
-                placeholder="Ex: 12"
-                {...register("Age", {
-                  required: "Hey! your age please.",
-                  min: {
-                    value: 5,
-                    message: "Minimum age should be 5.",
-                  },
-                  minLength: {
-                    value: 1,
-                    message: "Minimum 1 digit required.",
-                  },
-                })}
-              />
-              {errors.Age && (
-                <>
-                  <div
-                    className="bg-red-100 border border-red-400 text-red-700 rounded relative p-2.5 mt-2.5 font-bold w-9/12"
-                    role="alert"
-                    style={{ fontSize: "12px", padding: "5px 20px" }}
-                  >
-                    <span className="block sm:inline">{errors?.Age?.message}</span>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-          <div className="form-group mt-3">
             <label>Father's Full Name :</label>
             <div className="block">
               <Styld.FormInput
@@ -123,7 +94,9 @@ function StudentSignup() {
                     role="alert"
                     style={{ fontSize: "12px", padding: "5px 20px" }}
                   >
-                    <span className="block sm:inline">{errors?.fatherName?.message}</span>
+                    <span className="block sm:inline">
+                      {errors?.fatherName?.message}
+                    </span>
                   </div>
                 </>
               )}
@@ -144,7 +117,8 @@ function StudentSignup() {
                     message: "Minimum 6 letters required.",
                   },
                   pattern: {
-                    value: /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm,
+                    value:
+                      /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm,
                     message: "Looks like email is not valid.",
                   },
                 })}
@@ -156,12 +130,46 @@ function StudentSignup() {
                     role="alert"
                     style={{ fontSize: "12px", padding: "5px 20px" }}
                   >
-                    <span className="block sm:inline">{errors?.email?.message}</span>
+                    <span className="block sm:inline">
+                      {errors?.email?.message}
+                    </span>
                   </div>
                 </>
               )}
             </div>
           </div>
+          <div className="form-group mt-3">
+            <label>Date of Birth :</label>
+            <div className="block">
+              <Controller
+                control={control}
+                name="dateOfBirth"
+                rules={{ required: "Select your date of birth." }}
+                render={({ field }) => (
+                  <DatePicker
+                    selected={birthDate}
+                    onChange={(date) => setBirthDate(date)}
+                    isClearable
+                    placeholderText="Select your D.O.B"
+                    className="date_input"
+                  />
+                )}
+              />
+            </div>
+          </div>
+          {errors.dateOfBirth && (
+            <>
+              <div
+                className="bg-red-100 border border-red-400 text-red-700 rounded relative p-2.5 mt-2.5 font-bold w-9/12"
+                role="alert"
+                style={{ fontSize: "12px", padding: "5px 20px" }}
+              >
+                <span className="block sm:inline">
+                  {errors?.dateOfBirth?.message}
+                </span>
+              </div>
+            </>
+          )}
           <Styld.Submit
             type="submit"
             className="btn btn-primary mt-3 border border-2 border-dark"
