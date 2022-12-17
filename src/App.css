@@ -55,3 +55,13 @@ body{
   border: 0;
   border: 1px solid #adadad;
 }
+
+.phoneComponent{
+    border: 1px solid #e3e3e3;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.phoneComponent input:focus{
+  outline: none;
+}
