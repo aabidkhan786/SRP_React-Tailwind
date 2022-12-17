@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
-import "react-datepicker/dist/react-datepicker.css";
+import PhoneInput from "react-phone-number-input";
 import Styled from "styled-components";
 import signupImage from "../Images/signup-image.jpg";
 import duckImage from "../Images/6000_5_05.jpg";
+import "react-phone-number-input/style.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 function StudentSignup() {
-  const [birthDate, setBirthDate] = useState(new Date());
-
   const options = [
     { value: "Albania", label: "Albania" },
     { value: "Algeria", label: "Algeria" },
@@ -79,7 +79,9 @@ function StudentSignup() {
     register,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onChange",
+  });
 
   return (
     <Styld.SignupContainer className="flex w-9/12 mx-auto rounded-lg bg-white py-14 px-24 mt-14 justify-evenly items-center">
@@ -133,6 +135,44 @@ function StudentSignup() {
             </div>
           </div>
           <div className="form-group mt-3">
+            <label>Your Gender: </label>
+            <div className="flex">
+              <Styld.Gender>
+                <input
+                  type="radio"
+                  id="gender"
+                  value="Male"
+                  {...register("gender", {
+                    required: "Hey! you, your gender please.",
+                  })}
+                />
+                <label for="gender">Male</label>
+              </Styld.Gender>
+              <Styld.Gender>
+                <input
+                  type="radio"
+                  id="gender"
+                  value="Female"
+                  {...register("gender")}
+                />
+                <label for="gender">Female</label>
+              </Styld.Gender>
+            </div>
+            {errors.gender && (
+              <>
+                <div
+                  className="bg-red-100 border border-red-400 text-red-700 rounded relative p-2.5 mt-2.5 font-bold w-9/12"
+                  role="alert"
+                  style={{ fontSize: "12px", padding: "5px 20px" }}
+                >
+                  <span className="block sm:inline">
+                    {errors?.gender?.message}
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+          <div className="form-group mt-3">
             <label>Father's Full Name :</label>
             <div className="block">
               <Styld.FormInput
@@ -184,7 +224,7 @@ function StudentSignup() {
                   },
                   pattern: {
                     value:
-                      /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm,
+                      /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+\.[a-z]{2,3}/gm,
                     message: "Looks like email is not valid.",
                   },
                 })}
@@ -211,10 +251,10 @@ function StudentSignup() {
                 control={control}
                 name="dateOfBirth"
                 rules={{ required: "Select your date of birth." }}
-                render={({ field }) => (
+                render={({ field: { onChange, value } }) => (
                   <DatePicker
-                    selected={birthDate}
-                    onChange={(date) => setBirthDate(date)}
+                    onChange={onChange}
+                    selected={value}
                     isClearable
                     placeholderText="Select your D.O.B"
                     className="date_input"
@@ -275,7 +315,7 @@ function StudentSignup() {
               <Controller
                 control={control}
                 name="country"
-                rules={{ required: true }}
+                rules={{ required: "Please select out your country." }}
                 render={({ field: { onChange, value } }) => (
                   <Select
                     className="text-black"
@@ -289,7 +329,7 @@ function StudentSignup() {
                   />
                 )}
               />
-              {errors.homeAddress && (
+              {errors.country && (
                 <>
                   <div
                     className="bg-red-100 border border-red-400 text-red-700 rounded relative p-2.5 mt-2.5 font-bold w-9/12"
@@ -297,13 +337,43 @@ function StudentSignup() {
                     style={{ fontSize: "12px", padding: "5px 20px" }}
                   >
                     <span className="block sm:inline">
-                      {errors?.homeAddress?.message}
+                      {errors?.country?.message}
                     </span>
                   </div>
                 </>
               )}
             </div>
           </div>
+          {/* <div className="form-group mt-3">
+            <label>Phone Number: </label>
+            <div className="block">
+              <Controller
+                control={control}
+                name="phoneNumber"
+                rules={{ required: "Please select out your country." }}
+                render={({ field: { onChange, value } }) => (
+                    <PhoneInput
+                    placeholder="Enter phone number"
+                    value={value}
+                    className="phoneComponent"
+                    onChange={setValue}/>
+                )}
+              />
+              {errors.phoneNumber && (
+                <>
+                  <div
+                    className="bg-red-100 border border-red-400 text-red-700 rounded relative p-2.5 mt-2.5 font-bold w-9/12"
+                    role="alert"
+                    style={{ fontSize: "12px", padding: "5px 20px" }}
+                  >
+                    <span className="block sm:inline">
+                      {errors?.phoneNumber?.message}
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div> */}
           <Styld.Submit
             type="submit"
             className="btn btn-primary mt-3 border border-2 border-dark"
@@ -383,4 +453,11 @@ const Styld = {
         border: 1px solid #adadad;
     }
     `,
+  FormRadio: Styled.input`
+    `,
+  Gender:Styled.div`
+    display: flex;
+    width: 75px;
+    justify-content: space-evenly;
+  `
 };
